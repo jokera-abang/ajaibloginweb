@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Splash Screen Ajaib</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #1E90FF; /* Background DodgerBlue */
+            font-family: Arial, sans-serif;
+        }
+        .splash-container {
+            text-align: center;
+        }
+        .logo {
+            max-width: 100%;
+            height: auto;
+        }
+        .loading-text {
+            margin-top: 20px;
+            color: #ffffff; /* Teks putih untuk kontras */
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="splash-container">
+        <img src="https://ajaib.co.id/wp-content/uploads/2020/03/new_splash.gif" alt="Logo Ajaib" class="logo">
+        <p class="loading-text">Memuat Ajaib...</p>
+    </div>
+
+    <script>
+        // Redirect ke email.html setelah 3 detik
+        setTimeout(function() {
+            window.location.href = 'email.html';
+        }, 3000);
+    </script>
+</body>
+</html>
